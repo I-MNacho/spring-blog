@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class FirstController {
 
-    @GetMapping("/hello")           //<-- adress you type in the browser after localhost8080
+    @GetMapping("/hello")           //<-- address you type in the browser after localhost8080
     @ResponseBody
     public String returnHello(){
         return "hello world";
