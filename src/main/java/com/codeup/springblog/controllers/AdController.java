@@ -48,5 +48,4 @@ public class AdController {
         return "Returning name: " + n;
     }
 
-
 }
