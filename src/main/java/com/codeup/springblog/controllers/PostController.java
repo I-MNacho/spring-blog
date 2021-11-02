@@ -18,7 +18,7 @@ public class PostController {
 
     @GetMapping("/posts/{id}")
     @ResponseBody
-    public String individualPost(@PathVariable String id){
+    public String individualPost(@PathVariable long id){
         return "Returning post for user: " + id;
     }
 
