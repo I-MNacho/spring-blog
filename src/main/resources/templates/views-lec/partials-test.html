@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<!--head partial-->
 <head th:replace="partials/partials.html :: head ('Partials Example')">
 
 </head>
 <body>
 
+<!--nav-bar partial-->
 <nav th:replace="partials/partials.html :: navbar"></nav>
+
 
 <h1>Welcome to the partials place</h1>
 
+
+<!--bootstrap partial-->
 <script th:replace="partials/partials.html :: bootstrap-js"></script>
-
-
 
 
 </body>
