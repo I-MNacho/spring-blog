@@ -1,8 +1,8 @@
 //package com.codeup.springblog.controllers;
 //
-//import com.codeup.springblog.controllers.models.Coffee;
-//import com.codeup.springblog.controllers.models.Dice;
-//import com.codeup.springblog.controllers.models.DiceGame;
+//import com.codeup.springblog.models.Coffee;
+//import com.codeup.springblog.models.Dice;
+//import com.codeup.springblog.models.DiceGame;
 //import org.springframework.stereotype.Controller;
 //import org.springframework.ui.Model;
 //import org.springframework.web.bind.annotation.GetMapping;

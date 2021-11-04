@@ -1,5 +1,6 @@
 package com.codeup.springblog.controllers;
 
+import com.codeup.springblog.repositories.PostRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,9 +11,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PostController {
 
 
+    private PostRepository postsDAO;
+
+    public PostController(PostRepository postsDAO) {
+        this.postsDAO = postsDAO;
+    }
+
     @GetMapping("/posts")
     @ResponseBody
-    public String allPosts(){
+    public String index(){
+        //seed posts in the DB
+        //fetch ppsts with postsDao
+        //create a posts index view
+        //send a list of post objects to index view
         return "Returning all posts";
     }
 
@@ -34,5 +45,8 @@ public class PostController {
         return "creating new post...";
     }
 
+    //add an end point to send the user an edit post form / view
+    //create an edit post form
+    //create another endpoint to handle the ost request of editing a post
 
 }
