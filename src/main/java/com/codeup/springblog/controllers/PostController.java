@@ -1,11 +1,13 @@
 package com.codeup.springblog.controllers;
 
 import com.codeup.springblog.models.Post;
+import com.codeup.springblog.models.PostImage;
 import com.codeup.springblog.repositories.PostRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -34,17 +36,36 @@ public class PostController {
     }
 
     @GetMapping("/posts/create")
-    @ResponseBody
-    public String formForPost(){
-        return "Returning form for create";
+    public String create(){
+        return "posts/create";
     }
 
     @PostMapping("/posts/create")
-    @ResponseBody
-    public String newPostCreate(){
-        return "creating new post...";
+    public String insert(@RequestParam String title, @RequestParam String body, @RequestParam List<String> urls){
+
+        List<PostImage> images = new ArrayList<>();
+
+        Post post = new Post(title, body);
+
+        //create list of post image objects to pass to the new post constructor
+        for (String url : urls){
+            PostImage postImage = new PostImage(url);
+            postImage.setPost(post);
+            images.add(postImage);
+        }
+
+        post.setImages(images);
+
+    //save a post object with images
+    postsDAO.save(post);
+
+    //modify the post index view to display post images
+    return "redirect:/posts";
     }
 
+
+
+    //========================= EDIT
     //add an end point to send the user an edit post form / view
     //create an edit post form
     //create another endpoint to handle the ost request of editing a post
