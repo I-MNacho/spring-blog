@@ -1,11 +1,12 @@
 package com.codeup.springblog.controllers;
 
+import com.codeup.springblog.models.Post;
 import com.codeup.springblog.repositories.PostRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 public class PostController {
@@ -18,13 +19,12 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    @ResponseBody
-    public String index(){
-        //seed posts in the DB
-        //fetch ppsts with postsDao
-        //create a posts index view
+    public String index(Model model){
+        //fetch posts with postsDao
+        List<Post> posts = postsDAO.findAll();
         //send a list of post objects to index view
-        return "Returning all posts";
+        model.addAttribute("posts", posts);
+        return "posts/index";
     }
 
     @GetMapping("/posts/{id}")
@@ -48,5 +48,36 @@ public class PostController {
     //add an end point to send the user an edit post form / view
     //create an edit post form
     //create another endpoint to handle the ost request of editing a post
+
+    //send user to edit post form
+    @GetMapping("/posts/{id}/edit")
+    public String returnEditView(@PathVariable long id, Model viewModel){
+        //send an edit form to user
+        viewModel.addAttribute("post", postsDAO.getById(id));
+        return "posts/edit";
+    }
+
+    @PostMapping("/posts/{id}/edit")
+    public String updatePost(@PathVariable long id, @RequestParam String title, @RequestParam String body){
+        //use the new form inputs to update the existing post in the DB
+        //pull the existing post object from the database
+        Post post = postsDAO.getById(id);
+
+        //set the title and body to the request param values
+        post.setTitle(title);
+        post.setBody(body);
+
+        //persist the change in the db with the postsDao
+        postsDAO.save(post);        //works to both update and insert
+
+        return "redirect:/posts";
+    }
+
+    //delete logic to delete correct posts
+    @PostMapping("/posts/{id}/delete")
+    public String deletePost(@PathVariable long id){
+        postsDAO.deleteById(id);
+        return "redirect:/posts";
+    }
 
 }
