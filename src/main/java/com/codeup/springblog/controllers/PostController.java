@@ -2,7 +2,9 @@ package com.codeup.springblog.controllers;
 
 import com.codeup.springblog.models.Post;
 import com.codeup.springblog.models.PostImage;
+import com.codeup.springblog.models.User;
 import com.codeup.springblog.repositories.PostRepository;
+import com.codeup.springblog.repositories.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +17,11 @@ public class PostController {
 
 
     private PostRepository postsDAO;
+    private UserRepository usersDao;
 
-    public PostController(PostRepository postsDAO) {
+    public PostController(PostRepository postsDAO, UserRepository usersDao) {
         this.postsDAO = postsDAO;
+        this.usersDao = usersDao;
     }
 
     @GetMapping("/posts")
@@ -44,7 +48,7 @@ public class PostController {
     public String insert(@RequestParam String title, @RequestParam String body, @RequestParam List<String> urls){
 
         List<PostImage> images = new ArrayList<>();
-
+        User author = usersDao.getById(1L);
         Post post = new Post(title, body);
 
         //create list of post image objects to pass to the new post constructor
@@ -55,6 +59,8 @@ public class PostController {
         }
 
         post.setImages(images);
+
+        post.setUser(author);
 
     //save a post object with images
     postsDAO.save(post);
@@ -79,7 +85,7 @@ public class PostController {
     }
 
     @PostMapping("/posts/{id}/edit")
-    public String updatePost(@PathVariable long id, @RequestParam String title, @RequestParam String body){
+    public String updatePost(@PathVariable long id, @RequestParam(name="title") String title, @RequestParam String body){
         //use the new form inputs to update the existing post in the DB
         //pull the existing post object from the database
         Post post = postsDAO.getById(id);
