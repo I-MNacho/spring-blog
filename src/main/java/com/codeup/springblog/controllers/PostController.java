@@ -40,16 +40,19 @@ public class PostController {
     }
 
     @GetMapping("/posts/create")
-    public String create(){
+    public String create(Model model){
+        model.addAttribute("post", new Post());
         return "posts/create";
     }
 
+
+
     @PostMapping("/posts/create")
-    public String insert(@RequestParam String title, @RequestParam String body, @RequestParam List<String> urls){
+    public String insert(@ModelAttribute Post post, @RequestParam List<String> urls){
 
         List<PostImage> images = new ArrayList<>();
         User author = usersDao.getById(1L);
-        Post post = new Post(title, body);
+//        Post post = new Post(title, body);
 
         //create list of post image objects to pass to the new post constructor
         for (String url : urls){
@@ -85,17 +88,18 @@ public class PostController {
     }
 
     @PostMapping("/posts/{id}/edit")
-    public String updatePost(@PathVariable long id, @RequestParam(name="title") String title, @RequestParam String body){
+    public String updatePost(@ModelAttribute Post post){
         //use the new form inputs to update the existing post in the DB
         //pull the existing post object from the database
-        Post post = postsDAO.getById(id);
+        Post editedPost = postsDAO.getById(post.getId());
 
         //set the title and body to the request param values
-        post.setTitle(title);
-        post.setBody(body);
+        editedPost.setTitle(post.getTitle());
+        editedPost.setTitle(post.getBody());
+
 
         //persist the change in the db with the postsDao
-        postsDAO.save(post);        //works to both update and insert
+        postsDAO.save(post);        //works to both update and insert new posts
 
         return "redirect:/posts";
     }

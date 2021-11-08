@@ -80,7 +80,7 @@ public class AdController {
     @ResponseBody
     public String createAd(@RequestBody Ad newAd){
         adRepository.save(newAd);
-        return String.format("Ad created with an Id");
+        return String.format("Ad created with an ID of: %s", newAd.getId());
     }
 
 }
