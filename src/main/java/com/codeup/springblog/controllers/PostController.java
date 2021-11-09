@@ -5,6 +5,7 @@ import com.codeup.springblog.models.PostImage;
 import com.codeup.springblog.models.User;
 import com.codeup.springblog.repositories.PostRepository;
 import com.codeup.springblog.repositories.UserRepository;
+import com.codeup.springblog.services.EmailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class PostController {
 
     private PostRepository postsDAO;
     private UserRepository usersDao;
+    private EmailService emailService;
 
     public PostController(PostRepository postsDAO, UserRepository usersDao) {
         this.postsDAO = postsDAO;
@@ -67,6 +69,7 @@ public class PostController {
 
     //save a post object with images
     postsDAO.save(post);
+    emailService.prepareAndSend(post, "You submitted: "+ post.getTitle(), post.getBody());
 
     //modify the post index view to display post images
     return "redirect:/posts";
@@ -97,10 +100,13 @@ public class PostController {
         editedPost.setTitle(post.getTitle());
         editedPost.setTitle(post.getBody());
 
+//can be written this way but was replaced with code on lines 94-98
+//        User user = usersDao.getById(1L);
+//        post.setUser(user);
+
 
         //persist the change in the db with the postsDao
-        postsDAO.save(post);        //works to both update and insert new posts
-
+        postsDAO.save(editedPost);        //works to both update and insert new posts
         return "redirect:/posts";
     }
 

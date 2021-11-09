@@ -2,6 +2,7 @@ package com.codeup.springblog.controllers;
 
 import com.codeup.springblog.models.Coffee;
 import com.codeup.springblog.repositories.CoffeeRepository;
+import com.codeup.springblog.services.EmailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,12 @@ import java.util.List;
 @Controller
 public class CoffeeController {
     private final CoffeeRepository coffeeRepository;
+    private final EmailService emailService;
+
+    public CoffeeController(CoffeeRepository coffeeRepository, EmailService emailService) {
+        this.coffeeRepository = coffeeRepository;
+        this.emailService = emailService;
+    }
 
     public CoffeeController(CoffeeRepository coffeeRepository){
         this.coffeeRepository = coffeeRepository;
@@ -26,6 +33,13 @@ public class CoffeeController {
     public String roastSelection(@PathVariable String roast, Model model){
         model.addAttribute("selections", coffeeRepository.findByRoast(roast));
         return "coffees/coffee";
+    }
+
+    @PostMapping("/coffee")
+    public String newsletterSignup(@RequestParam(name="email") String email, Model model){
+        model.addAttribute("email", email);
+        emailService.prepareAndSend(email, "Thank you for signing up for our coffee newsletter");
+        return "/coffees/coffee";
     }
 
     @GetMapping("/coffee/create")
