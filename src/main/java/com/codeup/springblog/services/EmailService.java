@@ -53,8 +53,7 @@ public class EmailService {
     public void prepareAndSend(Post post, String email, String message) {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setFrom(from);
-        msg.setTo(    msg.setTo(post.getUser().getEmail());
-);
+//        msg.setTo(msg.setTo(post.getUser().getEmail()));
         msg.setSubject("Coffee Newsletter");
         msg.setText(message);
 
